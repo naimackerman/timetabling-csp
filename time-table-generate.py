@@ -22,30 +22,31 @@ def outputData(fileName, data):
         fileOb.write(dataStr)
 
 def backtracking(assignment, slots, depth):
-    if (depth == len(assignment)):             
-        return True                             
+    if (depth == len(assignment)):
+        return True
     global subs
-    global rooms  
-    sub = subs[depth][0]                                            
-    available = subs[depth][2:]               
-    category = subs[depth][1]                  
-    if (category == "c"):                                          
+    global rooms
+    sub = subs[depth][0]
+    available = subs[depth][2:]
+    category = subs[depth][1]
+    if (category == "c"):
         for slot in available:
-            if (slots[slot] == -1):             
-                assignment[depth] = [sub, slot, rooms[0]]      
-                slots[slot] = rooms[0]                       
+            if (slots[slot] == -1):
+                assignment[depth] = [sub, slot, rooms[0]]
+                slots[slot] = rooms[0]
                 if (backtracking(assignment, slots, depth+1)):
-                    return True              
+                    return True
                 else:
-                    slots[slot] = -1                  
+                    slots[slot] = -1
                     assignment[depth] = [sub, -1, -1]
-    elif (category == "o"):                   
-        for slot in available:                  
-            if (slots[slot] == -1):            
-                assignment[depth] = [sub, slot, rooms[0]] 
-                slots[slot] = [rooms[0]]      
+        return False
+    elif (category == "o"):
+        for slot in available:
+            if (slots[slot] == -1):
+                assignment[depth] = [sub, slot, rooms[0]]
+                slots[slot] = [rooms[0]]
                 if (backtracking(assignment, slots, depth+1)):
-                    return True                
+                    return True
                 else:
                     slots[slot] = -1
                     assignment[depth] = [sub, -1, -1]
@@ -62,6 +63,7 @@ def backtracking(assignment, slots, depth):
                 else:
                     slots[slot] = temp
                     assignment[depth] = [sub, -1, -1]
+        return False
 
 inputDetails = inputData('input.csv')
 
