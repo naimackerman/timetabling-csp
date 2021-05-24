@@ -26,6 +26,7 @@ def backtracking(assignment, slots, depth):
         return True
     global subs
     global rooms
+    global count
     sub = subs[depth][0]
     available = subs[depth][2:]
     category = subs[depth][1]
@@ -34,17 +35,26 @@ def backtracking(assignment, slots, depth):
             if (slots[slot] == -1):
                 assignment[depth] = [sub, slot, rooms[0]]
                 slots[slot] = rooms[0]
+                for sub in assignment:
+                    print(sub)
+                print("\n")
+                sub = subs[depth][0]
                 if (backtracking(assignment, slots, depth+1)):
                     return True
                 else:
                     slots[slot] = -1
                     assignment[depth] = [sub, -1, -1]
+        count = count + 1 
         return False
     elif (category == "o"):
         for slot in available:
             if (slots[slot] == -1):
                 assignment[depth] = [sub, slot, rooms[0]]
                 slots[slot] = [rooms[0]]
+                for sub in assignment:
+                    print(sub)
+                print("\n")
+                sub = subs[depth][0]
                 if (backtracking(assignment, slots, depth+1)):
                     return True
                 else:
@@ -58,19 +68,25 @@ def backtracking(assignment, slots, depth):
                 asRooms.append(rooms[len(asRooms)])
                 assignment[depth] = [sub, slot, asRooms[-1]]
                 slots[slot] = asRooms
+                for sub in assignment:
+                    print(sub)
+                print("\n")
+                sub = subs[depth][0]
                 if (backtracking(assignment, slots, depth+1)):
                     return True
                 else:
                     slots[slot] = temp
                     assignment[depth] = [sub, -1, -1]
+        count = count + 1
         return False
 
 inputDetails = inputData('input.csv')
 
-subs = inputDetails[:-2]    #3d array - sub_name,type,available_slots
-rooms = inputDetails[-2]    #array - room names
-slots = {}                  #dictionary - key is slot_name, when c sub assigned value is room_name, when o sub assigned value is array of room_names
-assignment = []             #3d array - sub_name,assigned_slot,room_name per each row
+subs = inputDetails[:-2]
+rooms = inputDetails[-2]
+slots = {}
+assignment = []
+count = 0
 
 for sub in subs:
     for slot in sub[2:]:
@@ -79,6 +95,9 @@ for sub in subs:
     assignment.append([sub[0],-1,-1])
 
 result = backtracking(assignment, slots, 0)
+
+print("Backtrack sebanyak : ")
+print(count)
 
 if (result):
     outputData('output.csv', assignment)
